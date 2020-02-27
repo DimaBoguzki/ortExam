@@ -1,0 +1,3 @@
+
+// RELOAD THE ENV FILE IN REAVT-NATIVE
+react-native start --reset-cache
