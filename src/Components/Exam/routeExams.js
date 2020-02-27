@@ -6,6 +6,8 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
+    View,
+    Image
 } from 'react-native';
 import ListExams from './listExams';
 import SetExam from './setExam';
@@ -79,12 +81,12 @@ function RouteExams(props) {
     }
 
     // handle wjen user chice witch exam to open
-    const handlePressExam=(exam_code)=>{
+    const handlePressExam=(exam_code,toClose)=>{
         const index = stateExams.exams.findIndex((el)=>el.examData.exam_code==exam_code);
         setIndexExam(index);
-        props.navigation.navigate("exam");
+        // toClose: true or false to close exam
+        props.navigation.navigate("exam",{closeExam:toClose,exam_code:exam_code,setStudent:false});
     }
-
     const examIsExist=(code)=>{
         let obj=null;
         obj = stateExams.exams.find((el)=>el.examData.exam_code===code);
@@ -101,8 +103,11 @@ function RouteExams(props) {
             props.navigation.navigate('ListExam');
         }
         else if(type==='student'){ // new input from barcodereader
-            absorbStudent(code, exam_code);
-            props.navigation.navigate('exam');
+            props.navigation.navigate('exam',{
+                student_id: code,
+                closeExam: false,
+                setStudent: true
+            });
         }
     }
     return (
@@ -117,11 +122,21 @@ function RouteExams(props) {
                             let exfd = new Date(el.examData.date);
                             let date = (exfd.getDate()+'/'+(exfd.getMonth()+1)+'/'+exfd.getFullYear());
                             return (
-                                <TouchableOpacity key={i} style={styles.examBtnItems} onPress={()=>handlePressExam(el.examData.exam_code)}>
-                                    <Text style={{fontSize:22}}>{el.examData.exam_name }</Text>
-                                    <Text style={{fontSize:18}}>{el.examData.exam_code }</Text>
-                                    <Text style={{fontSize:14}}>{date}</Text>
-                                </TouchableOpacity>
+                                <View key={i} style={styles.examItemContainer}>
+                                    <TouchableOpacity style={styles.btnPanel}
+                                        onPress={()=>{handlePressExam(el.examData.exam_code,true)}}>
+                                        <Image 
+                                            source={require('../../img/icon/save_icon.png')}
+                                            style={{width:60,height:60}}
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.examBtnItems} 
+                                        onPress={()=>handlePressExam(el.examData.exam_code,false)}>
+                                        <Text style={{fontSize:18}}>{el.examData.exam_name }</Text>
+                                        <Text style={{fontSize:16}}>{el.examData.exam_code }</Text>
+                                        <Text style={{fontSize:14}}>{date}</Text>
+                                    </TouchableOpacity>
+                                </View>
                             )
                         })
                     }
@@ -166,21 +181,41 @@ const styles = StyleSheet.create({
         marginTop: 20,
         padding:30,
         flexDirection:"column",
+        justifyContent: 'center',
         alignItems:"center",
         width:"95%",
         borderRadius:10,
         backgroundColor:'#eef',
     },
-    examBtnItems: {
-        flex: 1,
-        justifyContent: "center",
+    examItemContainer: {
+        flexDirection: 'row',
         alignItems: 'center',
-        width: '100%',
+        justifyContent: 'space-between',
         backgroundColor: "#fff",
         borderRadius: 10,
         borderWidth: 1,
         marginTop: 3,
         padding: 10,
+    },
+    examBtnItems: {
+        justifyContent: "flex-start",
+        alignItems: 'center',
+        width: '70%',
+        padding: 2,
+        borderWidth: 0.1,
+        borderRadius: 10,
+        elevation: 3
+    },
+    btnPanel: {
+        padding: 3,
+        alignItems:'center',
+        justifyContent: 'center',
+        margin: 1,
+        elevation: 5,
+        borderWidth: 0.5,
+        width: '20%',
+        backgroundColor: '#fff',
+        borderRadius: 10
     },
 });
 

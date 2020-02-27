@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React,{ useState, useEffect } from 'react';
 import axios from 'axios';
 import { HOST,PORT } from 'react-native-dotenv';
 import { useSelector, useDispatch } from 'react-redux';
@@ -36,6 +36,20 @@ function Exam(props) {
     const exfd = new Date(props.exam.examData.date);
     const date = (exfd.getDate()+'/'+(exfd.getMonth()+1)+'/'+exfd.getFullYear());
     
+    useEffect(()=>{
+        // set exam to close from RouteExams component
+        if(props.route.params.closeExam===true) {
+            onCloseExam(props.route.params.exam_code);
+        }
+        else if(props.route.params.setStudent===true){
+            const index = props.exam.students.findIndex(el=>el.student_id===parseInt(props.route.params.student_id));
+            if(index!==-1){
+                handleOpenStudentCard(index);
+                props.route.params.setStudent=false;
+            }
+        }
+    })
+
     //function close exam
     const setExamToClose = (exam_code) => {
         // notifacation set exam
@@ -45,7 +59,7 @@ function Exam(props) {
         .then((res)=> {
             if(res.data===true) {
                  // return to exam list component
-                props.navigation.navigate('ListExam');
+                props.navigation.pop();
                 // save changed in state reducer exam
                 dispatch(closeExamSuccsess(exam_code));
                 // notifocation exam is closed
@@ -88,6 +102,9 @@ function Exam(props) {
                 setTimeout(()=>{
                     dispatch(hideNotifocation());
                     handleCloseCardStudent();
+                    // if student to absored then sens sms 
+                    /*if(objToServer.isAbsorbed===1)
+                        sms();*/
                 },600);
             }
             else {
@@ -104,6 +121,41 @@ function Exam(props) {
                 dispatch(notifocationError("קליטת הסטודנט נכשלה"));
                 // hide notification
                 setTimeout(()=>{dispatch(hideNotifocation())},4000);
+        })
+    }
+
+    // send sms to student
+    const sms = () => {
+        if(indexStudent===-1)
+            return;
+        // onject to server
+        let exfd = new Date(props.exam.examData.date);
+        let date = (exfd.getDate()+'/'+(exfd.getMonth()+1)+'/'+exfd.getFullYear());
+        //object: body of sms
+        let obj = {
+            studentName: props.exam.students[indexStudent].first_name+" "+props.exam.students[indexStudent].last_name,
+            studentID: props.exam.students[indexStudent].student_id,
+            studenPhone: props.exam.students[indexStudent].phone,
+            examCode: props.exam.examData.exam_code,
+            examName: props.exam.examData.exam_name,
+            examDate: date
+        }
+
+        axios.post('http://'+HOST+':'+PORT+'/sms',obj)
+        .then((res)=> {
+            if(res.data===true) {
+                dispatch(notifocationSuccess("הודעה נשלחה לסטודנט"));
+                setTimeout(()=>dispatch(hideNotifocation()),2000);
+            }
+            else {
+                dispatch(notifocationError("הודעה לא נשלחה"));
+                setTimeout(()=>dispatch(hideNotifocation()),4000);
+            }
+        })
+        .catch((err)=> {
+            dispatch(notifocationError("הודעה לא נשלחה"));
+            setTimeout(()=>dispatch(hideNotifocation()),4000);
+            console.log('send sms faiel... ',err)
         })
     }
     // on close exam
@@ -125,7 +177,7 @@ function Exam(props) {
         setIsShow(true);
     }
     // handle clode student card
-    const handleCloseCardStudent= () => {
+    const handleCloseCardStudent = () => {
         setIsShow(false);
     }
 
@@ -151,6 +203,14 @@ function Exam(props) {
         }
         setStudent(objServer,objState);
     }
+    const countAbsorbed = () => {
+        let cnt=0;
+        props.exam.students.forEach(el => {
+            if(el.isAbsorbed===1)
+                cnt++;
+        });
+        return cnt;
+    }
     return(
         <ImageBackground
         source={require('../../img/background/background.png')} 
@@ -170,9 +230,11 @@ function Exam(props) {
                 <View style={styles.panelCenter}>
                     <Text>{props.exam.examData.exam_code}</Text>
                     <Text style={{fontSize:14}}>{date}</Text>
+                    <Text style={{fontSize:16}}>{"רשומים "+ props.exam.students.length}</Text>
+                    <Text style={{fontSize:16}}>{"נקלטו "+ countAbsorbed()}</Text>
                 </View>
                 <TouchableOpacity style={styles.btnPanel}
-                    onPress={()=>props.navigation.navigate("ListExam")}>
+                    onPress={()=>props.navigation.pop()}>
                     <Image 
                         source={require('../../img/icon/back_icon.png')}
                         style={{width:48,height:48}}

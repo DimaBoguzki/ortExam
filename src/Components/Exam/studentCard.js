@@ -18,10 +18,12 @@ function StudentCard(props) {
             <View style={styles.modal}>
                 <View style={styles.modalContent}>
                     <Image source={img} style={styles.imgStyle} />
-                        <Text style={{fontSize:22}}> {props.student.first_name +" "+ props.student.last_name}</Text>
-                        <Text style={{fontSize:18}}>{props.student.student_id}</Text>
+                    <View style={styles.txtContainer}>
+                        <Text style={{fontSize:24}}> {props.student.first_name +" "+ props.student.last_name}</Text>
+                        <Text style={{fontSize:20}}>{props.student.student_id}</Text>
                         <Text>{props.student.phone}</Text>
                         <Text>{props.student.email}</Text>
+                    </View>
                     { props.student.isAbsorbed===0 ?
                     <TouchableOpacity style={[styles.btnAprove,{backgroundColor:'green'}]} onPress={()=>props.onSubmit(1,props.student.student_id)}>
                         <Text style={{color: '#fff'}}>שלח אישור</Text>
@@ -82,5 +84,15 @@ const styles = StyleSheet.create({
         height: 100,
         borderWidth: 1,
         borderRadius: 10
+    },
+    txtContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10,
+        margin: 5,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderRadius: 10,
+        elevation:5,
     }
 });

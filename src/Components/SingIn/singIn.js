@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     textHeader:{
         fontSize:26,
         textAlign:'center',
-        color:'#cccccc',
+        color:'#000',
     },
     img:{
         width:100,
@@ -72,22 +72,19 @@ const styles = StyleSheet.create({
     },
     textInput:{
         backgroundColor:'#ffffff',
+        padding: 15,
         fontSize: 16,
         borderWidth:1,
         elevation:5,
         direction:'ltr',width:'100%'
     },
     btnSubmit:{
-        backgroundColor:'rgba(0,0,0,0.3)',
+        backgroundColor:'#069DF3',
         width:"95%",
         borderWidth:1,
         margin:10,
-        elevation:1,
-        padding:10,
+        elevation: 5,
+        padding: 15,
     },
-    loading:{
-        alignSelf:'center',
-        marginBottom:100,
-    }
 });
 export default SingIn;

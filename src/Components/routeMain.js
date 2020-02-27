@@ -34,6 +34,9 @@ function RouteMain() {
         axios.post("http://"+HOST+":"+PORT+"/exam/getAllOpenExamsBySupervisor",
             {supervisor_id:supervisorState.supervisor.supervisor_id})
         .then((response)=>{
+            if(response.data.length!==0){
+                alert("שים לב יש " + response.data.length + " מבחנים פתוחים, תדאג לסגור אותם ")
+            }
             dispatch(notifocationSuccess("הנתנוים נקלטו בהצלחה"));
             setTimeout(()=>dispatch(hideNotifocation()),1000);
             dispatch(fetchAllExamsSuccess(response.data));

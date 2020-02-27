@@ -19,7 +19,7 @@ import {
 
 const Tab = createBottomTabNavigator();
 
-function RouteLogIn(props) {
+function RouteLogIn() {
     // state
     const supervisorState = useSelector(state=>state.supervisorReducer);
     const connection = useSelector(state=>state.connectionReducer); 

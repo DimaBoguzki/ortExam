@@ -4,11 +4,8 @@ import { RNCamera } from 'react-native-camera';
 
 function BarCodeReader(props) {
   const handleOnClose = () => {
-    console.log(props.route.params.type)
-    if(props.route.params.type==='exam')
-      props.navigation.navigate('SetExam');
-    else // else if type is set student
-      props.navigation.navigate('exam');
+    // return back
+    props.navigation.pop();
   }
   return (
     <View style={styles.container}>
@@ -24,7 +21,7 @@ function BarCodeReader(props) {
               buttonNegative: 'Cancel',
             }}
             onGoogleVisionBarcodesDetected={({ barcodes }) => {
-                props.onSubmit(barcodes[0].data,props.route.params.type);
+                props.onSubmit(barcodes[0].data, props.route.params.type);
             }}>
         </RNCamera>
       </View>
