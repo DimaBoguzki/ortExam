@@ -10,7 +10,8 @@ import axios from 'axios';
 import { HOST,PORT } from 'react-native-dotenv';
 import { 
     fetchAllExamsSuccess,
-    fetchExamFail
+    fetchExamFail,
+    resetAllExam
  } from '../Redux/exam/examAction';
  import { 
     hideNotifocation,
@@ -28,15 +29,14 @@ function RouteMain() {
 
     // function to fetxh all open exam off supervisor
     const getAllExams = () => {
+        console.log(supervisorState.supervisor ,"supervisor")
         // notification loading all exams
         dispatch(notifocationWaiting("טוען נתונים..."));
         // fetch exams
         axios.post("http://"+HOST+":"+PORT+"/exam/getAllOpenExamsBySupervisor",
             {supervisor_id:supervisorState.supervisor.supervisor_id})
         .then((response)=>{
-            if(response.data.length!==0){
-                alert("שים לב יש " + response.data.length + " מבחנים פתוחים, תדאג לסגור אותם ")
-            }
+            console.log(response.data)
             dispatch(notifocationSuccess("הנתנוים נקלטו בהצלחה"));
             setTimeout(()=>dispatch(hideNotifocation()),1000);
             dispatch(fetchAllExamsSuccess(response.data));
@@ -51,7 +51,10 @@ function RouteMain() {
     useEffect(() => {
         getAllExams();
     },[]);
-
+    const hanleOnDisconnected = () => {
+        dispatch(supervisorDisconnect());
+        dispatch(resetAllExam());
+    }
     let text = supervisorState.supervisor.gender===1 ? ' ברוכה הבאה ' : ' ברוך הבא ';
             text+=supervisorState.supervisor.first_name;
 
@@ -64,7 +67,7 @@ function RouteMain() {
     }
     return (
         <View style={styles.container}>
-            <MainHeader text={text} onDisconect={()=>{dispatch(supervisorDisconnect())}}/>
+            <MainHeader text={text} onDisconect={()=>hanleOnDisconnected()}/>
             <NavigationContainer>   
                 <Tab.Navigator 
                     initialRouteName='RouteExams'

@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import {View,Text,TouchableOpacity,ActivityIndicator} from 'react-native';
+import {View,Text,TouchableOpacity} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { HOST,PORT } from 'react-native-dotenv';
+import {HOST,PORT} from '../../configuration';
 import {useSelector, useDispatch} from 'react-redux';
 import SingIn from './singIn';
 import {
@@ -66,7 +66,6 @@ function RouteLogIn() {
         padding: 0,
     }
     return (
-        <>
         <NavigationContainer>   
             <Tab.Navigator 
                 initialRouteName='התחברות ידנית' 
@@ -77,14 +76,6 @@ function RouteLogIn() {
                 </Tab.Screen>
             </Tab.Navigator>
         </NavigationContainer>
-            {supervisorState.loading===true ? 
-                <ActivityIndicator 
-                animating={supervisorState.loading}
-                size="large"
-                color='#ff0000'/> : null
-            }
-        </>
-
     );
 }
 

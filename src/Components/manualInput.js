@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {View,StyleSheet,TouchableOpacity,TextInput,Text,Image} from 'react-native';
-import CloseButon from './CloseButton';
+import {View,StyleSheet,TouchableOpacity,TextInput,Image} from 'react-native';
 /** 
  * הכנסה ידנית של ברקוד
  * props : type : string: id,exam

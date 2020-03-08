@@ -1,4 +1,5 @@
 import { 
+    RESET_ALL_EXAM,
     FETCH_ALL_EXAMS_SUCCESS,
     FETCH_EXAM_FAIL,
     FETCH_EXAM_SUCCESS,
@@ -14,6 +15,11 @@ import {
  }
  const examsReducer = (state=initialState, action) => {
      switch (action.type) {
+        case RESET_ALL_EXAM: 
+            return {
+                ...state,
+                exams: []
+            }
         case FETCH_EXAM_SUCCESS: // fetcj one exam
             return {
                 exams: [...state.exams, action.payload],

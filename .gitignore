@@ -60,3 +60,4 @@ buck-out/
 /android
 .env
 /__tests__/
+/src/configuration.js

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { HOST,PORT } from 'react-native-dotenv';
+import {HOST,PORT} from '../../configuration';
 import {
     StyleSheet,
     Text,
@@ -67,8 +67,9 @@ function RouteExams(props) {
                 dispatch(fetchExamSuccess(response.data));
             }
             else{
-                dispatch(fetchExamFail("exam not exist"));
-                dispatch(notifocationError("מבחן לא קיים במאגר"));
+                alert(response.data.error)
+                dispatch(fetchExamFail(response.data.error));
+                dispatch(notifocationError(response.data.error));
                 setTimeout(()=>{dispatch(hideNotifocation())},3000);
             };
         })

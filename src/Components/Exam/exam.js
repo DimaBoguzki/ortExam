@@ -1,6 +1,6 @@
 import React,{ useState, useEffect } from 'react';
 import axios from 'axios';
-import { HOST,PORT } from 'react-native-dotenv';
+import {HOST,PORT} from '../../configuration';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     StyleSheet,
@@ -97,14 +97,16 @@ function Exam(props) {
                 // success absord
                 dispatch(toggleStudentSuccess(objToState));
                 // success absord notification
-                dispatch(notifocationSuccess("הסטודנט נקלט"));
+                if(objToServer.isAbsorbed===0)
+                    dispatch(notifocationSuccess("הסטודנט הוסר"));
+                else dispatch(notifocationSuccess("הסטודנט נקלט"));
                 // hide notification
                 setTimeout(()=>{
                     dispatch(hideNotifocation());
                     handleCloseCardStudent();
                     // if student to absored then sens sms 
-                    /*if(objToServer.isAbsorbed===1)
-                        sms();*/
+                    if(objToServer.isAbsorbed===1)
+                        sms();
                 },600);
             }
             else {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet,View,TouchableOpacity,Text,Image} from 'react-native';
+import { StyleSheet,View,TouchableOpacity,Image} from 'react-native';
 import { RNCamera } from 'react-native-camera';
 
 function BarCodeReader(props) {

@@ -2,8 +2,8 @@ import React,{ useState }from 'react';
 import {View,Text,TouchableOpacity,StyleSheet,TextInput,ImageBackground,Image} from "react-native";
 
 function SingIn(props) {
-    const [id, setId] = useState(1);
-    const [password, setPassword] = useState("12345678");
+    const [id, setId] = useState(-1);
+    const [password, setPassword] = useState(-1);
     const onSubmit=()=>{
         if(id===null || id===""){
             alert("שדה תעודת זהות ריק");

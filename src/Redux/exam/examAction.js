@@ -1,4 +1,5 @@
 import { 
+    RESET_ALL_EXAM,
     FETCH_ALL_EXAMS_SUCCESS,
     FETCH_EXAM_FAIL,
     FETCH_EXAM_SUCCESS,
@@ -8,7 +9,12 @@ import {
     TOGGLE_STUDENT_SUCCESS
  } from './examType';
 
- export const fetchAllExamsSuccess=(exam)=>{
+export const resetAllExam = () => {
+    return {
+        type: RESET_ALL_EXAM
+    }
+}
+export const fetchAllExamsSuccess=(exam)=>{
     return {
         type: FETCH_ALL_EXAMS_SUCCESS,
         payload: exam,
